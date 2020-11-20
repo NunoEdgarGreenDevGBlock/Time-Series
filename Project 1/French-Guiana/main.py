@@ -155,4 +155,35 @@ ax.set(xlabel=fr'Index $i$',
        title=fr'Peaks in Temperature Data')
 ax.grid()
 ax.legend()
+
+print(p_opt, std)
+
+# Autocorrelation Matrix
+years = np.array(list(range(3, 8)))
+vector_stat = df['Stationary Temperature'].values[
+              years[0] * 365:years[-1] * 365]
+vector_noise = df['Residual Temperature'].values[
+               years[0] * 365:years[-1] * 365]
+autocorr_stat_matrix = np.outer(vector_stat, vector_stat)
+autocorr_noise_matrix = np.outer(vector_noise, vector_noise)
+fig, ax = plt.subplots()
+im = ax.imshow(autocorr_stat_matrix, cmap='seismic')
+plt.xticks((years - years[0]) * 365, years)
+plt.yticks((years - years[0]) * 365, years)
+ax.grid(color='k', linestyle='--', linewidth=0.5)
+fig.colorbar(im)
+ax.set(xlabel=r'Years',
+ylabel = fr'Years',
+title = fr'Autocorrelation Matrix of Stationary Data')
+
+_, ax = plt.subplots()
+im = ax.imshow(autocorr_noise_matrix, cmap='seismic')
+plt.xticks((years - years[0]) * 365, years)
+plt.yticks((years - years[0]) * 365, years)
+ax.grid(color='k', linestyle='--', linewidth=0.5)
+plt.colorbar(im)
+ax.set(xlabel=r'Years',
+ylabel = fr'Years',
+title = fr'Autocorrelation Matrix of the Residual')
+
 plt.show()
