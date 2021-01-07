@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 
-from library import (get_elliptic_filter, plot_filter, load_data,
-                     apply_filter, plot_series, plot_spectrum)
+from library import *
 
 # Load Data
 path = 'Temperature_dataset.csv'
@@ -9,16 +8,18 @@ df = load_data(path)
 
 # Design Filter
 N = 4
-rp = 20
+rp = 1
 rs = 40
 Wn = 2.1
-b, a = get_elliptic_filter(N, rp, rs, Wn)
 
-df['Filtered'] = apply_filter(df['Temperature'], b, a)
+# elliptic, butterworth, russian (rp =^= 'I')
+b, a = get_butterworth_filter(N, Wn)
+
+df['Elliptic'] = apply_filter(df['Temperature'], b, a)
 
 plot_filter(b, a, Wn)
-plot_series(df, ['Temperature', 'Filtered'],
-                 ['Raw Data', 'Elliptic Filter'])
-plot_spectrum(df, ['Temperature', 'Filtered'], ['Raw Data', 'Filtered'])
+plot_series(df, ['Temperature', 'Elliptic'],
+            ['Raw Data', 'Elliptic Filter'])
+plot_spectrum(df, ['Temperature', 'Elliptic'], ['Raw Data', 'Elliptic'])
 
 plt.show()

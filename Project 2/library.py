@@ -3,7 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.fft import fft, fftfreq
 from scipy.signal.windows import boxcar
-from scipy.signal import convolve, ellip, filtfilt, freqz
+from scipy.signal import (convolve, ellip, butter, cheby1, cheby2, filtfilt,
+                          freqz)
 
 
 def load_data(path):
@@ -31,6 +32,21 @@ def apply_filter(series, b, a):
 def get_elliptic_filter(N, rp, rs, Wn):
     Wn /= 365  # 1/year
     b, a = ellip(N, rp, rs, Wn, 'low', analog=False, output='ba', fs=1)
+
+    return b, a
+
+
+def get_butterworth_filter(N, Wn):
+    Wn /= 365
+    b, a = butter(N, Wn, 'low', analog=False, output='ba', fs=1)
+
+    return b, a
+
+
+def get_russian_filter(N, r, Wn, type='I'):
+    Wn /= 365
+    filter = cheby1 if type == 'I' else cheby2
+    b, a = filter(N, r, Wn, 'low', analog=False, output='ba', fs=1)
 
     return b, a
 
