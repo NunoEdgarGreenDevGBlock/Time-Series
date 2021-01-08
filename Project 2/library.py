@@ -20,12 +20,12 @@ def load_data(path):
     return df
 
 
-def apply_boxcar(series, T, pad_num=20, mean_num=50):
+def apply_boxcar(series, T, mean_num=50):
     b = boxcar(T) / T
-    series = mean_padding(series, pad_num, mean_num)
+    series = mean_padding(series, T, mean_num)
     temp = convolve(series, b, mode='same', method='direct')
 
-    return temp[pad_num:-pad_num]
+    return temp[T:-T]
 
 
 def mean_padding(series, num, mean_num):

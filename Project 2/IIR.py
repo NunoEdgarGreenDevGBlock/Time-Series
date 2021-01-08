@@ -7,7 +7,7 @@ path = 'Temperature_dataset.csv'
 df = load_data(path)
 
 # Design Filter
-N = 8
+N = 1
 rp = 1
 rs = 40
 Wn = 2.1
