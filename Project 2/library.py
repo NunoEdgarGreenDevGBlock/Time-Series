@@ -20,9 +20,19 @@ def load_data(path):
     return df
 
 
-def apply_boxcar(series, T):
+def apply_boxcar(series, T, pad_num=20, mean_num=50):
     b = boxcar(T) / T
-    return convolve(series, b, mode='same', method='direct')
+    series = mean_padding(series, pad_num, mean_num)
+    temp = convolve(series, b, mode='same', method='direct')
+
+    return temp[pad_num:-pad_num]
+
+
+def mean_padding(series, num, mean_num):
+    series = num * [np.mean(series[:mean_num])] + series.to_list() + \
+             num * [np.mean(series[-mean_num:])]
+
+    return series
 
 
 def apply_filter(series, b, a):
